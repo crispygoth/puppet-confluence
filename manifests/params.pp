@@ -38,6 +38,19 @@ class confluence::params {
             }
           }
         }
+        'Debian': {
+          if versioncmp($facts['os']['release']['major'], '7') > 0 {
+            $service_file_location   = '/etc/systemd/system/confluence.service'
+            $service_file_template   = 'confluence/confluence.service.erb'
+            $service_lockfile        = '/run/lock/subsys/confluence'
+            $refresh_systemd         = true
+          } else {
+            $service_file_location   = '/etc/init.d/confluence'
+            $service_file_template   = 'confluence/confluence.initscript.erb'
+            $service_lockfile        = '/var/lock/confluence'
+            $refresh_systemd         = false
+          }
+        }
         default: {
           $service_file_location   = '/etc/init.d/confluence'
           $service_file_template   = 'confluence/confluence.initscript.erb'
